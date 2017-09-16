@@ -10,7 +10,6 @@ import android.view.View;
 
 /**
  * Created by Administrator 可爱的路人 on 2017/9/16.
- *
  */
 
 public class SixChessDot extends View {
@@ -71,6 +70,6 @@ public class SixChessDot extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        canvas.drawCircle(getMeasuredWidth() / 2, getMeasuredHeight() / 2, getMeasuredWidth() / 2 - 2, paint);
+        canvas.drawCircle(getWidth() / 2, getHeight() / 2, getMeasuredWidth() / 2 - 50, paint);
     }
 }

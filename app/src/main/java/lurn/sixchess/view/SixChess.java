@@ -18,7 +18,7 @@ import java.util.LinkedList;
  * Created by Administrator 可爱的路人 on 2017/9/16.
  */
 
-public class SixChess extends FrameLayout implements View.OnClickListener {
+public class SixChess extends FrameLayout implements View.OnClickListener, View.OnTouchListener {
     private LinkedList<SixChessDot> blackDot = new LinkedList<>();
     private LinkedList<SixChessDot> whiteDot = new LinkedList<>();
     private SixChessBoard sixChessBoard;
@@ -45,6 +45,7 @@ public class SixChess extends FrameLayout implements View.OnClickListener {
 
     private void init() {
         sixChessBoard = new SixChessBoard(getContext());
+        sixChessBoard.setOnTouchListener(this);
         addView(sixChessBoard);
         reset();
     }
@@ -57,7 +58,7 @@ public class SixChess extends FrameLayout implements View.OnClickListener {
         int boardSize = width > height ? height : width;
         int xEx = width > height ? (width - height) / 2 : 0;
         int yEx = height > width ? (height - width) / 2 : 0;
-        int dotSize = boardSize / 4 - 6;
+        int dotSize = boardSize / 4;
         for (int i = 0; i < getChildCount(); i++) {
             View childAt = getChildAt(i);
             if (childAt instanceof SixChessBoard) {
@@ -68,8 +69,8 @@ public class SixChess extends FrameLayout implements View.OnClickListener {
                 layoutParams.height = dotSize;
                 int xposition = ((SixChessDot) childAt).getxPosition();
                 int yposition = ((SixChessDot) childAt).getyPosition();
-                layoutParams.leftMargin = xposition * boardSize / 4 + 3 + xEx;
-                layoutParams.topMargin = yposition * boardSize / 4 + 3 + yEx;
+                layoutParams.leftMargin = xposition * boardSize / 4 + xEx;
+                layoutParams.topMargin = yposition * boardSize / 4 + yEx;
             }
         }
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
@@ -117,10 +118,18 @@ public class SixChess extends FrameLayout implements View.OnClickListener {
         return super.onTouchEvent(event);
     }
 
+    SixChessDot preMoveDot;
+
     @Override
     public void onClick(View v) {
         if (v instanceof SixChessDot) {
-
+            preMoveDot = (SixChessDot) v;
         }
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+
+        return false;
     }
 }
