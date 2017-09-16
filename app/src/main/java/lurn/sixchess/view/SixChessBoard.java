@@ -59,7 +59,7 @@ public class SixChessBoard extends View {
     protected void onDraw(Canvas canvas) {
         int width = getMeasuredWidth();
         int gridSize = width / 8;
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 4; i++) {
             canvas.drawLine((i * 2 + 1) * gridSize, gridSize, (i * 2 + 1) * gridSize, width - gridSize, paint);
             canvas.drawLine(gridSize, (i * 2 + 1) * gridSize, width - gridSize, (i * 2 + 1) * gridSize, paint);
         }
