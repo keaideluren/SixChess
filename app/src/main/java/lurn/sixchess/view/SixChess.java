@@ -22,6 +22,7 @@ public class SixChess extends FrameLayout implements View.OnClickListener, View.
     private LinkedList<SixChessDot> blackDot = new LinkedList<>();
     private LinkedList<SixChessDot> whiteDot = new LinkedList<>();
     private SixChessBoard sixChessBoard;
+    private boolean isBlackTurn = true;
 
     public SixChess(@NonNull Context context) {
         super(context);
@@ -120,25 +121,68 @@ public class SixChess extends FrameLayout implements View.OnClickListener, View.
 
         int[] rowColor = new int[]{2, 2, 2, 2};
         int[] colColor = new int[]{2, 2, 2, 2};
+        SixChessDot rowOtherColor = null;
+        SixChessDot colOtherColor = null;
         //1220  0122 2210 0221可以吃的样子 0黑 1白 2空
         for (int i = 0; i < 4; i++) {
             for (SixChessDot s : whiteDot) {
                 if (s.getxPosition() == xPosition && s.getyPosition() == i) {
-                    //与移动后的棋子同一行
-                    rowColor[i] = 1;
-                } else if (s.getxPosition() == i && s.getyPosition() == yPosition) {
                     //与移动后的棋子同一列
+                    rowColor[i] = 1;
+                    if (s.getType() != type) {
+                        rowOtherColor = s;
+                    }
+                }
+                if (s.getxPosition() == i && s.getyPosition() == yPosition) {
+                    //与移动后的棋子同一行
                     colColor[i] = 1;
+                    if (s.getType() != type) {
+                        colOtherColor = s;
+                    }
                 }
             }
             for (SixChessDot s : blackDot) {
                 if (s.getxPosition() == xPosition && s.getyPosition() == i) {
-                    //与移动后的棋子同一行
-                    rowColor[i] = 0;
-                } else if (s.getxPosition() == i && s.getyPosition() == yPosition) {
                     //与移动后的棋子同一列
-                    colColor[i] = 0;
+                    rowColor[i] = 0;
+                    if (s.getType() != type) {
+                        rowOtherColor = s;
+                    }
                 }
+                if (s.getxPosition() == i && s.getyPosition() == yPosition) {
+                    //与移动后的棋子同一行
+                    colColor[i] = 0;
+                    if (s.getType() != type) {
+                        colOtherColor = s;
+                    }
+                }
+            }
+        }
+        String colStr = new StringBuilder()
+            .append(colColor[0])
+            .append(colColor[1])
+            .append(colColor[2])
+            .append(colColor[3]).toString();
+        String rowStr = new StringBuilder()
+            .append(rowColor[0])
+            .append(rowColor[1])
+            .append(rowColor[2])
+            .append(rowColor[3]).toString();
+        String whiteRule = "1102,2110,0112,2011";
+        String blackRule = "0012,2001,1002,2100";
+        if (type == 1) {
+            if (whiteRule.contains(rowStr)) {
+                removeChess(rowOtherColor);
+            }
+            if (whiteRule.contains(colStr)) {
+                removeChess(colOtherColor);
+            }
+        } else {
+            if (blackRule.contains(rowStr)) {
+                removeChess(rowOtherColor);
+            }
+            if (blackRule.contains(colStr)) {
+                removeChess(colOtherColor);
             }
         }
     }
@@ -185,10 +229,14 @@ public class SixChess extends FrameLayout implements View.OnClickListener, View.
     }
 
     public void moveChess(SixChessDot preMoveDot, int toX, int toY) {
+        if ((isBlackTurn && preMoveDot.getType() == 1) || (!isBlackTurn && preMoveDot.getType() == 0)) {
+            return;
+        }
+        isBlackTurn = !isBlackTurn;
         if ((Math.abs(preMoveDot.getxPosition() - toX) + Math.abs(preMoveDot.getyPosition() - toY)) == 1) {
             preMoveDot.setPosition(toX, toY);
-            doRuleRemoveChess(preMoveDot);
             requestLayout();
+            doRuleRemoveChess(preMoveDot);
         }
     }
 
@@ -211,6 +259,7 @@ public class SixChess extends FrameLayout implements View.OnClickListener, View.
     public void removeChess(SixChessDot sixChessDot) {
         whiteDot.remove(sixChessDot);
         blackDot.remove(sixChessDot);
+        removeView(sixChessDot);
         requestLayout();
     }
 }
