@@ -17,6 +17,7 @@ public class SixChessDot extends View {
     private Paint paint;
     private int xPosition;
     private int yPosition;
+    private int type = 0;//0 或 1
 
     public void setPosition(int x, int y) {
         this.xPosition = x;
@@ -48,9 +49,10 @@ public class SixChessDot extends View {
         paint.setColor(color);
     }
 
-    public SixChessDot(Context context, int color) {
+    public SixChessDot(Context context, int color ,int type) {
         super(context);
         this.color = color;
+        this.type = type;
         paint = new Paint();
         paint.setColor(color);
         paint.setStyle(Paint.Style.FILL);
@@ -66,6 +68,14 @@ public class SixChessDot extends View {
 
     public SixChessDot(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 
     @Override
